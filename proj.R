@@ -22,6 +22,43 @@ wage = data[,"eur_wage",]
 colors = c("red", "yellow", "green", "violet", "orange", "blue", "pink", "cyan")
 
 #The command to plot the diagram
-hist( x, col=colors, main="Wage distribution of soccer players", xlab ="nummbe of playesrs in each bucket" ,ylab="Wage for each bucket", breaks=10 )
+hist( unlist(wage), col=colors, main="Wage distribution of soccer players", xlab ="nummbe of playesrs in each bucket" ,ylab="Wage for each bucket", breaks=10 )
 
-plot(density(x))
+#The density plot
+ggplot(data, aes(x=wage))+  geom_density(color="darkblue", fill="lightblue", linetype="dashed")
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+#Boxplot
+ggplot(data, aes( x=ID ,y=wage)) + geom_boxplot(outlier.colour="red", outlier.shape=8,outlier.size=4)
+
+#Detect outliers
+upper_outliers = wage[ wage > 27000 ]
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q2 P1
+ggplot(data, aes(x=age, y=wage))+geom_point()
+
+#P2
+cor(wage, age)
+
+#p3
+ggplot(data, aes(x=age, y=wage)) + 
+  +     geom_point()+
+  +     geom_smooth()
+
+#P4
+ggplot(data, aes(x=data[,.(height_cm),], y=wage))+geom_point()
+cor(wage, unlist( data[,.(height_cm),] ))
+ggplot(data, aes(x=height_cm, y=wage)) + geom_point() + geom_smooth()
+
+
+ggplot(data, aes(x=height_cm, y=age))+geom_point() 
+cor(age, unlist( data[,.(height_cm),] ))
+ggplot(data, aes(x=height_cm, y=age)) + geom_point() + geom_smooth()
+
+#P5
+bin<-hexbin(age, wage)
+plot(bin)
